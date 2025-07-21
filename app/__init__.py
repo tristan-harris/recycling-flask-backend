@@ -11,9 +11,10 @@ from .routes import route_blueprints
 
 load_dotenv()
 
-pymysql.install_as_MySQLdb() # needed as an alternative to mysqlclient
+pymysql.install_as_MySQLdb()  # needed as an alternative to mysqlclient
 
-def create_app(test_config:dict|None = None):
+
+def create_app(test_config: dict | None = None):
     app = Flask(__name__)
 
     app.config.from_prefixed_env()
@@ -22,7 +23,10 @@ def create_app(test_config:dict|None = None):
     if test_config is not None:
         app.config.from_mapping(test_config)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = f'mysql://{app.config["DATABASE_USER"]}:{app.config["DATABASE_PASSWORD"]}@{app.config["DATABASE_HOST"]}/{app.config["DATABASE_NAME"]}'
+    app.config["SQLALCHEMY_DATABASE_URI"] = (
+        f'mysql://{app.config["DATABASE_USER"]}:{app.config["DATABASE_PASSWORD"]}@'
+        f'{app.config["DATABASE_HOST"]}/{app.config["DATABASE_NAME"]}'
+    )
 
     jwt_manager.init_app(app)
 

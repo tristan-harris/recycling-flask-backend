@@ -2,15 +2,16 @@ import pytest
 
 from app.models import Recyclable
 
+
 @pytest.fixture()
 def recyclable_data():
-    return \
-    {
+    return {
         "type": "cardboard",
         "points_value": 10_000,
         "description": "Cardboard Box",
-        "weight": 10
+        "weight": 10,
     }
+
 
 @pytest.fixture()
 def recyclable(db, recyclable_data):

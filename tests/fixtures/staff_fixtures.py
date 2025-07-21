@@ -2,13 +2,14 @@ import pytest
 
 from app.models import Staff
 
+
 @pytest.fixture()
 def staff_data(user):
-    return \
-    {
+    return {
         "user_id": user.id,
         "role": "admin",
     }
+
 
 @pytest.fixture()
 def staff(db, staff_data):

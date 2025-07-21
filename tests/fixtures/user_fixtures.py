@@ -6,14 +6,15 @@ from app.models import User, Staff
 
 _password = "password"
 
+
 @pytest.fixture()
 def password():
     return _password
 
+
 @pytest.fixture()
 def user_data():
-    return \
-    {
+    return {
         "username": "TheUser",
         "password": generate_password_hash(_password),
         "email": "user@user.com",
@@ -23,20 +24,20 @@ def user_data():
         "date_of_birth": "1990-01-01",
     }
 
+
 @pytest.fixture()
 def user_data_minimal():
-    return \
-    {
+    return {
         "username": "TheUser",
         "password": generate_password_hash(_password),
         "email": "user@user.com",
         "date_of_birth": "1990-01-01",
     }
 
+
 @pytest.fixture()
 def moderator_data():
-    return \
-    {
+    return {
         "username": "TheModerator",
         "password": generate_password_hash(_password),
         "email": "moderator@moderator.com",
@@ -46,10 +47,10 @@ def moderator_data():
         "date_of_birth": "1990-01-01",
     }
 
+
 @pytest.fixture()
 def admin_data():
-    return \
-    {
+    return {
         "username": "TheAdmin",
         "password": generate_password_hash(_password),
         "email": "admin@admin.com",
@@ -60,12 +61,14 @@ def admin_data():
         "organisation": "The University",
     }
 
+
 @pytest.fixture()
 def user(db, user_data):
     user = User(**user_data)
     db.session.add(user)
     db.session.commit()
     return user
+
 
 @pytest.fixture()
 def moderator(db, moderator_data):
@@ -79,6 +82,7 @@ def moderator(db, moderator_data):
 
     return moderator
 
+
 @pytest.fixture()
 def admin(db, admin_data):
     admin = User(**admin_data)
@@ -91,21 +95,31 @@ def admin(db, admin_data):
 
     return admin
 
+
 @pytest.fixture()
 def unauth_client(client):
     return client
 
+
 @pytest.fixture()
 def auth_user_client(client, user):
-    client.environ_base["HTTP_AUTHORIZATION"] = f"Bearer {create_access_token(identity=user)}"
+    client.environ_base["HTTP_AUTHORIZATION"] = (
+        f"Bearer {create_access_token(identity=user)}"
+    )
     return client
+
 
 @pytest.fixture()
 def auth_mod_client(client, moderator):
-    client.environ_base["HTTP_AUTHORIZATION"] = f"Bearer {create_access_token(identity=moderator)}"
+    client.environ_base["HTTP_AUTHORIZATION"] = (
+        f"Bearer {create_access_token(identity=moderator)}"
+    )
     return client
+
 
 @pytest.fixture()
 def auth_admin_client(client, admin):
-    client.environ_base["HTTP_AUTHORIZATION"] = f"Bearer {create_access_token(identity=admin)}"
+    client.environ_base["HTTP_AUTHORIZATION"] = (
+        f"Bearer {create_access_token(identity=admin)}"
+    )
     return client

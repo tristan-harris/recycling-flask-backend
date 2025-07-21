@@ -6,12 +6,14 @@ from ..database_controller import NotFoundError, FailedAuthenticationError
 from ..models import Staff
 from ..schemas import LoginSchema, validate_data
 
-other_routes_bp = Blueprint("other", __name__, url_prefix = "/")
+other_routes_bp = Blueprint("other", __name__, url_prefix="/")
+
 
 @other_routes_bp.route("")
 def home():
     message = "Recycling Project API"
     return {"message": message}
+
 
 @other_routes_bp.route("login", methods=["POST"])
 def login() -> dict | tuple[dict, int]:
@@ -19,7 +21,10 @@ def login() -> dict | tuple[dict, int]:
 
     validation_result = validate_data(request_data, LoginSchema)
     if not validation_result.valid:
-        return {"error": validation_result.error_message, "message": validation_result.info}, 400
+        return {
+            "error": validation_result.error_message,
+            "message": validation_result.info,
+        }, 400
     request_data = validation_result.data
 
     try:
@@ -27,8 +32,11 @@ def login() -> dict | tuple[dict, int]:
     except (NotFoundError, FailedAuthenticationError):
         return {"error": "Authentication failed"}, 401
 
-    return_data = {"message": "Login successful", "user": user.to_dict(),
-                   "token": create_access_token(identity=user)}
+    return_data = {
+        "message": "Login successful",
+        "user": user.to_dict(),
+        "token": create_access_token(identity=user),
+    }
 
     try:
         staff = db_controller.get(Staff, "user_id", user.id)

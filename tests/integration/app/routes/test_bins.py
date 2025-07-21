@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.usefixtures("isolated_transactions")
 class TestBins:
     def test_create_bin(self, auth_admin_client, bin_data):
@@ -8,16 +9,24 @@ class TestBins:
 
     def test_upload_bin_image(self, auth_admin_client, bin, bin_image_file_path):
         with open(bin_image_file_path, "rb") as image_file:
-            response = auth_admin_client.post(f"/bins/{bin.id}/image", data={"image": image_file})
+            response = auth_admin_client.post(
+                f"/bins/{bin.id}/image", data={"image": image_file}
+            )
         assert response.status_code == 200
 
-    def test_upload_bin_image_inadequate_access(self, auth_mod_client, bin, bin_image_file_path):
+    def test_upload_bin_image_inadequate_access(
+        self, auth_mod_client, bin, bin_image_file_path
+    ):
         with open(bin_image_file_path, "rb") as image_file:
-            response = auth_mod_client.post(f"/bins/{bin.id}/image", data={"image": image_file})
+            response = auth_mod_client.post(
+                f"/bins/{bin.id}/image", data={"image": image_file}
+            )
         assert response.status_code == 403
 
     def test_upload_bin_image_invalid_data(self, auth_admin_client, bin):
-        response = auth_admin_client.post(f"/bins/{bin.id}/image", data={"image": "data"})
+        response = auth_admin_client.post(
+            f"/bins/{bin.id}/image", data={"image": "data"}
+        )
         assert response.status_code == 400
 
     def test_get_bin(self, unauth_client, bin):

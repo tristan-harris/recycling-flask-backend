@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.usefixtures("isolated_transactions")
 class TestOther:
     def test_home(self, unauth_client):
@@ -27,7 +28,11 @@ class TestOther:
         assert response.status_code == 200
 
     def test_login_user_username_and_email(self, unauth_client, user, password):
-        login_data = {"username": user.username, "email": user.email, "password": password}
+        login_data = {
+            "username": user.username,
+            "email": user.email,
+            "password": password,
+        }
         response = unauth_client.post("/login", json=login_data)
         assert response.status_code == 400
 

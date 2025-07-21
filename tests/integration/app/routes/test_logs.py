@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.usefixtures("isolated_transactions")
 class TestLogs:
     def test_create_user_logs(self, unauth_client, auth_admin_client, user_data):
@@ -19,13 +20,17 @@ class TestLogs:
         response = auth_admin_client.get("/logs/actions")
         assert response.status_code == 200
 
-    def test_create_bin_log_inadequate_access(self, auth_admin_client, auth_mod_client, bin_data):
+    def test_create_bin_log_inadequate_access(
+        self, auth_admin_client, auth_mod_client, bin_data
+    ):
         auth_admin_client.post("/bins", json=bin_data)
         response = auth_mod_client.get("/logs/actions")
         assert response.status_code == 403
 
     def test_update_bin_log(self, auth_admin_client, bin):
-        auth_admin_client.patch(f"/bins/{bin.id}", json={"description": "New description"})
+        auth_admin_client.patch(
+            f"/bins/{bin.id}", json={"description": "New description"}
+        )
         response = auth_admin_client.get("logs/actions")
         assert response.status_code == 200
 

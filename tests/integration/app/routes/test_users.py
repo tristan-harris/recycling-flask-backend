@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.usefixtures("isolated_transactions")
 class TestUsers:
     def test_create_user(self, unauth_client, user_data):
@@ -10,13 +11,13 @@ class TestUsers:
     def test_create_user_duplicate_user(self, unauth_client, user_data, user):
         user_data["email"] = "SomeOtherEmailAddress@mail.com"
         response = unauth_client.post("/register", json=user_data)
-        assert response.status_code == 409 # conflict error
+        assert response.status_code == 409  # conflict error
 
     # email field must be unique
     def test_create_user_duplicate_email(self, unauth_client, user_data, user):
         user_data["username"] = "SomeOtherUsername"
         response = unauth_client.post("/register", json=user_data)
-        assert response.status_code == 409 # conflict error
+        assert response.status_code == 409  # conflict error
 
     # date of birth must use ISO 8601 standard (YYYY-MM-DD)
     def test_create_user_invalid_dob_format(self, unauth_client, user_data):
@@ -36,7 +37,7 @@ class TestUsers:
     def test_get_user_invalid_token(self, auth_user_client, user):
         auth_user_client.environ_base["HTTP_AUTHORIZATION"] = "Bearer 1234"
         response = auth_user_client.get(f"/users/{user.id}")
-        assert response.status_code == 422 # unprocessable content
+        assert response.status_code == 422  # unprocessable content
 
     def test_get_user_all(self, auth_mod_client, user):
         response = auth_mod_client.get("/users")

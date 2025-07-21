@@ -12,16 +12,17 @@ from tests.fixtures.staff_fixtures import *
 from tests.fixtures.submission_fixtures import *
 from tests.fixtures.user_fixtures import *
 
+
 @pytest.fixture(scope="session")
 def test_config(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("uploads")
 
-    return \
-    {
+    return {
         "TESTING": True,
         "DATABASE_NAME": "recycling_project_TEST",
         "UPLOADS_DIRECTORY": str(tmp_path),
     }
+
 
 @pytest.fixture(scope="session")
 def app(test_config):
@@ -32,9 +33,11 @@ def app(test_config):
     with test_app.app_context():
         _db.drop_all()
 
+
 @pytest.fixture(scope="session")
 def db():
     return _db
+
 
 # ensures that each database transaction is rolled back at the end of a test
 @pytest.fixture()
@@ -45,7 +48,9 @@ def isolated_transactions(app, db):
 
         # override global session for test
         db.session = scoped_session(
-            session_factory=sessionmaker(bind=connection, join_transaction_mode="create_savepoint")
+            session_factory=sessionmaker(
+                bind=connection, join_transaction_mode="create_savepoint"
+            )
         )
 
         yield
@@ -53,6 +58,7 @@ def isolated_transactions(app, db):
         db.session.close()
         transaction.rollback()
         connection.close()
+
 
 @pytest.fixture()
 def client(app):

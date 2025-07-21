@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.usefixtures("isolated_transactions")
 class TestRecyclables:
     def test_create_recyclable(self, auth_admin_client, recyclable_data):
@@ -16,7 +17,9 @@ class TestRecyclables:
 
     def test_update_recyclable(self, auth_admin_client, recyclable):
         update_recyclable_data = {"description": "New description"}
-        response = auth_admin_client.patch(f"/recyclables/{recyclable.id}", json=update_recyclable_data)
+        response = auth_admin_client.patch(
+            f"/recyclables/{recyclable.id}", json=update_recyclable_data
+        )
         assert response.status_code == 200
 
     def test_delete_recyclable(self, auth_admin_client, recyclable):

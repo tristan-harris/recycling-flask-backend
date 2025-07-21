@@ -4,14 +4,23 @@ from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, current_user
 from werkzeug.security import generate_password_hash
 
-from . import RouteErrors, db_controller, get_resource, get_resource_all, create_resource, update_resource, delete_resource
+from . import (
+    RouteErrors,
+    db_controller,
+    get_resource,
+    get_resource_all,
+    create_resource,
+    update_resource,
+    delete_resource,
+)
 from .other import other_routes_bp
 from ..config import AppConfig
 from ..database_controller import NotFoundError
 from ..models import User, Submission, Purchase
 from ..schemas import RegistrationSchema, validate_data
 
-users_routes_bp = Blueprint("users", __name__, url_prefix= "/users")
+users_routes_bp = Blueprint("users", __name__, url_prefix="/users")
+
 
 @users_routes_bp.route("", methods=["POST"])
 @other_routes_bp.route("register", methods=["POST"])
@@ -20,7 +29,10 @@ def create_user():
 
     validation_result = validate_data(request_data, RegistrationSchema)
     if not validation_result.valid:
-        return {"error": validation_result.error_message, "message": validation_result.info}, 400
+        return {
+            "error": validation_result.error_message,
+            "message": validation_result.info,
+        }, 400
     request_data = validation_result.data
 
     # check if username or email are already taken
@@ -42,13 +54,15 @@ def create_user():
 
     return create_resource(User, request_data, None)
 
+
 @users_routes_bp.route("/<int:id>", methods=["GET"])
 @jwt_required()
-def get_user(id:int):
+def get_user(id: int):
     if not db_controller.is_owner_or_moderator(current_user.id, User, id):
         return RouteErrors.UNAUTHORISED_ACCESS.value
 
     return get_resource(User, "id", id)
+
 
 @users_routes_bp.route("", methods=["GET"])
 @jwt_required()
@@ -58,9 +72,10 @@ def get_user_all():
 
     return get_resource_all(User)
 
+
 @users_routes_bp.route("/<int:id>/submissions", methods=["GET"])
 @jwt_required()
-def get_user_submissions(id:int):
+def get_user_submissions(id: int):
     if not db_controller.is_owner_or_moderator(current_user.id, User, id):
         return RouteErrors.UNAUTHORISED_ACCESS.value
 
@@ -72,9 +87,10 @@ def get_user_submissions(id:int):
         submissions = db_controller.get_all_matching(Submission, "user_id", id)
         return {"submissions": [submission.to_dict() for submission in submissions]}
 
+
 @users_routes_bp.route("/<int:id>/purchases", methods=["GET"])
 @jwt_required()
-def get_user_purchases(id:int):
+def get_user_purchases(id: int):
     if not db_controller.is_owner_or_moderator(current_user.id, User, id):
         return RouteErrors.UNAUTHORISED_ACCESS.value
 
@@ -86,9 +102,10 @@ def get_user_purchases(id:int):
         purchases = db_controller.get_all_matching(Purchase, "user_id", id)
         return {"purchases": [purchase.to_dict() for purchase in purchases]}
 
+
 @users_routes_bp.route("/<int:id>/balance", methods=["GET"])
 @jwt_required()
-def get_user_balance(id:int):
+def get_user_balance(id: int):
     if not db_controller.is_owner_or_moderator(current_user.id, User, id):
         return RouteErrors.UNAUTHORISED_ACCESS.value
 
@@ -99,9 +116,10 @@ def get_user_balance(id:int):
     else:
         return {"points_balance": points_balance}
 
+
 @users_routes_bp.route("/<int:id>", methods=["PATCH"])
 @jwt_required()
-def update_user(id:int):
+def update_user(id: int):
     if not db_controller.is_owner_or_admin(current_user.id, User, id):
         return RouteErrors.UNAUTHORISED_ACCESS.value
 
@@ -109,7 +127,10 @@ def update_user(id:int):
 
     validation_result = validate_data(request_data, RegistrationSchema, partial=True)
     if not validation_result.valid:
-        return {"error": validation_result.error_message, "message": validation_result.info}, 400
+        return {
+            "error": validation_result.error_message,
+            "message": validation_result.info,
+        }, 400
     request_data = validation_result.data
 
     if "password" in request_data:
@@ -117,16 +138,18 @@ def update_user(id:int):
 
     return update_resource(User, "id", id, request_data, current_user.id)
 
+
 @users_routes_bp.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
-def delete_user(id:int):
+def delete_user(id: int):
     if not db_controller.is_owner_or_admin(current_user.id, User, id):
         return RouteErrors.UNAUTHORISED_ACCESS.value
     return delete_resource(User, "id", id, current_user.id)
 
+
 @users_routes_bp.route("/<int:id>/freeze", methods=["POST"])
 @jwt_required()
-def freeze_user(id:int):
+def freeze_user(id: int):
     if not db_controller.has_moderator_access_level(current_user.id):
         return RouteErrors.UNAUTHORISED_ACCESS.value
 
@@ -136,9 +159,10 @@ def freeze_user(id:int):
 
     return update_resource(User, "id", id, {"frozen": True}, current_user.id)
 
+
 @users_routes_bp.route("/<int:id>/unfreeze", methods=["POST"])
 @jwt_required()
-def unfreeze_user(id:int):
+def unfreeze_user(id: int):
     if not db_controller.has_moderator_access_level(current_user.id):
         return RouteErrors.UNAUTHORISED_ACCESS.value
     return update_resource(User, "id", id, {"frozen": False}, current_user.id)

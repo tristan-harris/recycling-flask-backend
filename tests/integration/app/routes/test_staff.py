@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.usefixtures("isolated_transactions")
 class TestStaff:
     def test_create_staff(self, auth_admin_client, staff_data):
@@ -33,7 +34,9 @@ class TestStaff:
 
     def test_update_staff(self, auth_admin_client, staff):
         update_staff_data = {"role": "moderator"}
-        response = auth_admin_client.patch(f"/staff/{staff.user_id}", json=update_staff_data)
+        response = auth_admin_client.patch(
+            f"/staff/{staff.user_id}", json=update_staff_data
+        )
         assert response.status_code == 200
 
     def test_update_staff_inadequate_access(self, auth_mod_client, admin):
@@ -43,7 +46,9 @@ class TestStaff:
 
     def test_update_staff_invalid_data(self, auth_admin_client, staff):
         update_staff_data = {"data": "data"}
-        response = auth_admin_client.patch(f"/staff/{staff.user_id}", json=update_staff_data)
+        response = auth_admin_client.patch(
+            f"/staff/{staff.user_id}", json=update_staff_data
+        )
         assert response.status_code == 400
 
     def test_delete_staff(self, auth_admin_client, staff):
