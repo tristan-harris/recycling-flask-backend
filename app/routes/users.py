@@ -29,17 +29,13 @@ def create_user():
     if not db_controller.is_unique(User, "email", request_data["email"]):
         return {"error": "This email address has already been used"}, 409
 
-    # # check if user is of minimum age
-    # user_dob = request_data["date_of_birth"]
-    # today = date.today()
-    # cutoff = date(today.year - AppConfig.MINIMUM_AGE, today.month, today.day)
-    #
-    # # if user_dob is more recent (and therefore 'bigger'/longer than cutoff)
-    # if user_dob > cutoff:
-    #     return {"error": f"You must be over the age of {AppConfig.MINIMUM_AGE}"}, 403
-
     # check if user is of minimum age
-    if request_data["age"] < AppConfig.MINIMUM_AGE:
+    user_dob = request_data["date_of_birth"]
+    today = date.today()
+    cutoff = date(today.year - AppConfig.MINIMUM_AGE, today.month, today.day)
+
+    # if user_dob is more recent (and therefore 'bigger'/longer than cutoff)
+    if user_dob > cutoff:
         return {"error": f"You must be over the age of {AppConfig.MINIMUM_AGE}"}, 403
 
     request_data["password"] = generate_password_hash(request_data["password"])

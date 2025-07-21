@@ -14,8 +14,7 @@ class RegistrationSchema(Schema):
     phone_number    = fields.Str(validate = validate.Length(max=15))
     first_name      = fields.Str(validate = validate.Length(max=255))
     last_name       = fields.Str(validate = validate.Length(max=255))
-    # date_of_birth   = fields.Date(required = True)
-    age             = fields.Int(required = True)
+    date_of_birth   = fields.Date(required = True)
     organisation    = fields.Str(validate = validate.Length(max=255))
 
 class LoginSchema(Schema):

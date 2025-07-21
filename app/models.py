@@ -16,8 +16,7 @@ class User(db.Model):
     phone_number: Mapped[str] = mapped_column(String(15), nullable = False, default = "")
     first_name: Mapped[str] = mapped_column(String(255), nullable = False, default = "")
     last_name: Mapped[str] = mapped_column(String(255), nullable = False, default = "")
-    # date_of_birth: Mapped[date] = mapped_column(Date, nullable = False)
-    age: Mapped[int] = mapped_column(Integer, nullable = False)
+    date_of_birth: Mapped[date] = mapped_column(Date, nullable = False)
     organisation:Mapped[str] = mapped_column(String(255), nullable = False, default = "")
     frozen:Mapped[bool] = mapped_column(Boolean, nullable = False, default = False)
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP, nullable = False)
@@ -28,8 +27,7 @@ class User(db.Model):
     def to_dict(self) -> dict:
         return {"id": self.id, "username": self.username, "email": self.email,
                 "phone_number": self.phone_number, "first_name": self.first_name, "last_name": self.last_name,
-                # "date_of_birth": self.date_of_birth.isoformat(), "organisation": self.organisation,
-                "age": self.age, "organisation": self.organisation,
+                "date_of_birth": self.date_of_birth.isoformat(), "organisation": self.organisation,
                 "frozen": self.frozen, "created_at": int(self.created_at.timestamp())}
 
     def __repr__(self) -> str:
@@ -102,7 +100,7 @@ class AllowedRecyclable(db.Model):
 
     def __repr__(self) -> str:
         return str(self.to_dict())
-    
+
 class Recyclable(db.Model):
     __tablename__ = "recyclables"
     id: Mapped[int] = \
