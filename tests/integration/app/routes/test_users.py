@@ -18,15 +18,14 @@ class TestUsers:
         response = unauth_client.post("/register", json=user_data)
         assert response.status_code == 409 # conflict error
 
-    # # date of birth must use ISO 8601 standard (YYYY-MM-DD)
-    # def test_create_user_invalid_dob_format(self, unauth_client, user_data):
-    #     user_data["date_of_birth"] = "1/4/1990"
-    #     response = unauth_client.post("/register", json=user_data)
-    #     assert response.status_code == 400
+    # date of birth must use ISO 8601 standard (YYYY-MM-DD)
+    def test_create_user_invalid_dob_format(self, unauth_client, user_data):
+        user_data["date_of_birth"] = "1/4/1990"
+        response = unauth_client.post("/register", json=user_data)
+        assert response.status_code == 400
 
     def test_create_user_too_young(self, unauth_client, user_data):
-        # user_data["date_of_birth"] = "2024-01-01"
-        user_data["age"] = 10
+        user_data["date_of_birth"] = "2024-01-01"
         response = unauth_client.post("/register", json=user_data)
         assert response.status_code == 403
 

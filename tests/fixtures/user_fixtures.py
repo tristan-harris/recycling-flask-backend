@@ -20,8 +20,7 @@ def user_data():
         "phone_number": "111",
         "first_name": "User",
         "last_name": "User",
-        # "date_of_birth": "1990-01-01",
-        "age": 100,
+        "date_of_birth": "1990-01-01",
     }
 
 @pytest.fixture()
@@ -31,8 +30,7 @@ def user_data_minimal():
         "username": "TheUser",
         "password": generate_password_hash(_password),
         "email": "user@user.com",
-        # "date_of_birth": "1990-01-01",
-        "age": 100,
+        "date_of_birth": "1990-01-01",
     }
 
 @pytest.fixture()
@@ -45,8 +43,7 @@ def moderator_data():
         "phone_number": "222",
         "first_name": "Moderator",
         "last_name": "Moderator",
-        # "date_of_birth": "1990-01-01",
-        "age": 100,
+        "date_of_birth": "1990-01-01",
     }
 
 @pytest.fixture()
@@ -59,9 +56,8 @@ def admin_data():
         "phone_number": "333",
         "first_name": "Admin",
         "last_name": "Admin",
-        # "date_of_birth": "1990-01-01",
-        "organisation": "University",
-        "age": 100,
+        "date_of_birth": "1990-01-01",
+        "organisation": "The University",
     }
 
 @pytest.fixture()
