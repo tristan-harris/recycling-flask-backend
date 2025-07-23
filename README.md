@@ -15,6 +15,6 @@ Libraries used:
 
 ### Frontend Screenshots
 
-![First Screenshot](meta/images/screenshot_1.jpg)
+<img src="meta/images/screenshot_1.jpg" alt="First Screenshot" width="500">
 
-![Second Screenshot](meta/images/screenshot_2.jpg)
+<img src="meta/images/screenshot_2.jpg" alt="Second Screenshot" width="500">
